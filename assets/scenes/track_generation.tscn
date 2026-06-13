@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c7veyj7ynh324"]
+
+[ext_resource type="Script" uid="uid://c8nadd7d1bbs7" path="res://assets/scripts/path.gd" id="1_vkfw6"]
+[ext_resource type="PackedScene" uid="uid://bjnlncdpd4dgg" path="res://car.tscn" id="2_pxmfl"]
+
+[sub_resource type="Curve2D" id="Curve2D_pxmfl"]
+_data = {
+"points": PackedVector2Array(546.37427, -659.3172, -546.37427, 659.3172, 342, 432, 360.59735, 693.4689, 890, -693.469, 897, 432, -418.06445, -677.32043, 418.06445, 677.32043, 199, 411)
+}
+point_count = 3
+
+[node name="Node2D" type="Node2D" unique_id=661988187]
+
+[node name="Path2D" type="Path2D" parent="." unique_id=942233631 node_paths=PackedStringArray("car")]
+curve = SubResource("Curve2D_pxmfl")
+script = ExtResource("1_vkfw6")
+track_width = 30.0
+car = NodePath("../car")
+
+[node name="car" parent="." unique_id=1056452564 instance=ExtResource("2_pxmfl")]
+position = Vector2(-1405, 763)
+scale = Vector2(0.3, 0.3)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1327712816]
+zoom = Vector2(0.2, 0.2)

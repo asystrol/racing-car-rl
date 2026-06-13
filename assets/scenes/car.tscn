@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bxl21m8ijqyac"]
+
+[ext_resource type="Script" uid="uid://be6gaicuyr0b0" path="res://assets/scripts/car.gd" id="1_uoj53"]
+[ext_resource type="Texture2D" uid="uid://bf4m1owlvik10" path="res://assets/sprites/WhiteStrip.png" id="2_k61xc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_06lh1"]
+size = Vector2(54, 29)
+
+[node name="car" type="CharacterBody2D" unique_id=1056452564]
+script = ExtResource("1_uoj53")
+engine_power = 1200.0
+max_steer_low = 15.0
+min_steer_high = 2.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=913486481]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_06lh1")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=656148275]
+texture = ExtResource("2_k61xc")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=913024387]
