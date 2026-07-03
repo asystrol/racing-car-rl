@@ -1,16 +1,15 @@
 extends CharacterBody2D
 
-# --- Vehicle Specifications ---
+signal reset
+
 @export var engine_power: float = 800.0
 @export var braking_force: float = -450.0
 @export var max_speed_reverse: float = 250.0
 
-# --- Dynamic Steering Specs ---
-@export var max_steer_low: float = 25.0 # Max turn angle (degrees) at low speeds
-@export var min_steer_high: float = 5.0 # Max turn angle (degrees) at top speed
-@export var threshold_speed: float = 600.0 # Speed at which steering becomes fully stiff
+@export var max_steer_low: float = 25.0 
+@export var min_steer_high: float = 5.0 
+@export var threshold_speed: float = 600.0 
 
-# --- Traction & Physics ---
 @export var friction: float = -0.9
 @export var drag: float = -0.0015
 @export var wheel_base: float = 70.0
@@ -18,18 +17,48 @@ extends CharacterBody2D
 @export var traction_fast: float = 0.1 
 @export var traction_slow: float = 0.7 
 
+@onready var aicontrol = $AIController2D
+@export var track: Node2D
+@export var reward_label: Label
+
 var acceleration: Vector2 = Vector2.ZERO
 var input_turn: float = 0.0
+var frame_reward = 0.0
+var check_point_reward = 0.0
+var reward := 0.0
+var checkpoints = 0
+var split_time := 0.0
+var total_rewards := 0.0
 
 func _physics_process(delta: float) -> void:
-	acceleration = Vector2.ZERO
+	split_time += delta
+	total_rewards += reward
+	reward_label.text = "%.2f" %total_rewards
 	
-	get_input()
+	acceleration = Vector2.ZERO
+	#get_input()
+	get_input_from_model()
 	apply_friction()
 	calculate_steering(delta)
 	
 	velocity += acceleration * delta
+	calculate_reward()
 	move_and_slide()
+	
+	if split_time > 30:
+		frame_reward = -50
+	if split_time > 30.1:
+		aicontrol.reset()
+		reset.emit.call_deferred()
+	
+func get_input_from_model() -> void:
+	input_turn = aicontrol.steer
+	if aicontrol.accelerate == -1:
+		acceleration = transform.x * braking_force
+	elif aicontrol.accelerate == 1:
+		acceleration = transform.x * engine_power
+	else:
+		acceleration = Vector2.ZERO
 
 func get_input() -> void:
 	input_turn = Input.get_axis("steer left", "steer right")
@@ -74,3 +103,47 @@ func calculate_steering(delta: float) -> void:
 		velocity = -new_heading * min(current_speed, max_speed_reverse)
 		
 	rotation = new_heading.angle()
+
+func calculate_reward():
+	print(track.track_reward)
+	if frame_reward != -50:
+		if velocity.dot(transform.x) > 0 and track.track_reward > 0.005:
+			frame_reward = 0.01
+		else:
+			frame_reward = -0.01
+		
+	reward = frame_reward + track.track_reward + check_point_reward
+
+
+	
+func add_checkpoint_reward():
+	print(checkpoints)
+	var exponent = (-1)*0.6*(split_time-8)
+	check_point_reward = 20 * (1 + exp(exponent))
+	split_time = 0.0
+
+func _on__1_entered(_body: Node2D) -> void:
+	if checkpoints == 0 and split_time > 2:
+		checkpoints += 1
+		add_checkpoint_reward()
+
+func _on__2_entered(_body: Node2D) -> void:
+	if checkpoints == 1:
+		checkpoints += 1
+		add_checkpoint_reward()
+
+func _on__3_entered(_body: Node2D) -> void:
+	if checkpoints == 2:
+		checkpoints += 1
+		add_checkpoint_reward()
+
+func _on__4_entered(_body: Node2D) -> void:
+	if checkpoints == 3:
+		checkpoints += 1
+		add_checkpoint_reward()
+
+func _on__5_entered(_body: Node2D) -> void:
+	if checkpoints == 4:
+		checkpoints += 1
+		add_checkpoint_reward()
+		reset.emit.call_deferred()

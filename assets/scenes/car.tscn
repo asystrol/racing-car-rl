@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://be6gaicuyr0b0" path="res://assets/scripts/car.gd" id="1_uoj53"]
 [ext_resource type="Texture2D" uid="uid://bf4m1owlvik10" path="res://assets/sprites/WhiteStrip.png" id="2_k61xc"]
+[ext_resource type="Script" uid="uid://dbu2w77dokagf" path="res://assets/scripts/raycasts.gd" id="3_dy4le"]
+[ext_resource type="Script" uid="uid://cccxrjc68i5wb" path="res://assets/scripts/ai_controller.gd" id="4_67lsi"]
+[ext_resource type="Script" uid="uid://w5qrj3b0sr8p" path="res://addons/godot_rl_agents/sync.gd" id="5_j0kb1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_06lh1"]
 size = Vector2(54, 29)
@@ -19,4 +22,64 @@ shape = SubResource("RectangleShape2D_06lh1")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=656148275]
 texture = ExtResource("2_k61xc")
 
-[node name="RayCast2D" type="RayCast2D" parent="." unique_id=913024387]
+[node name="raycasts" type="Node2D" parent="." unique_id=1921315842 node_paths=PackedStringArray("car", "ray1", "ray2", "ray3", "ray4", "ray5", "ray6", "ray7", "ray8", "ray9", "ray10", "ray11")]
+script = ExtResource("3_dy4le")
+car = NodePath("..")
+ray1 = NodePath("1")
+ray2 = NodePath("2")
+ray3 = NodePath("3")
+ray4 = NodePath("4")
+ray5 = NodePath("5")
+ray6 = NodePath("6")
+ray7 = NodePath("7")
+ray8 = NodePath("8")
+ray9 = NodePath("9")
+ray10 = NodePath("10")
+ray11 = NodePath("11")
+
+[node name="1" type="RayCast2D" parent="raycasts" unique_id=913024387]
+target_position = Vector2(0, 200)
+
+[node name="2" type="RayCast2D" parent="raycasts" unique_id=1526397779]
+target_position = Vector2(51.764, 193.185)
+
+[node name="3" type="RayCast2D" parent="raycasts" unique_id=1564262169]
+target_position = Vector2(141.421, 141.421)
+
+[node name="4" type="RayCast2D" parent="raycasts" unique_id=1699982916]
+target_position = Vector2(173.205, 100)
+
+[node name="5" type="RayCast2D" parent="raycasts" unique_id=817963802]
+target_position = Vector2(193.185, 51.764)
+
+[node name="6" type="RayCast2D" parent="raycasts" unique_id=1989172413]
+target_position = Vector2(200, 0)
+
+[node name="7" type="RayCast2D" parent="raycasts" unique_id=146454671]
+target_position = Vector2(193.185, -51.764)
+
+[node name="8" type="RayCast2D" parent="raycasts" unique_id=136510934]
+target_position = Vector2(173.205, -100)
+
+[node name="9" type="RayCast2D" parent="raycasts" unique_id=2046785622]
+target_position = Vector2(141.421, -141.421)
+
+[node name="10" type="RayCast2D" parent="raycasts" unique_id=1460748367]
+target_position = Vector2(51.764, -193.185)
+
+[node name="11" type="RayCast2D" parent="raycasts" unique_id=1251004990]
+target_position = Vector2(0, -200)
+
+[node name="AIController2D" type="Node2D" parent="." unique_id=653280901 node_paths=PackedStringArray("raycasts", "car")]
+script = ExtResource("4_67lsi")
+raycasts = NodePath("../raycasts")
+car = NodePath("..")
+metadata/_custom_type_script = "uid://i8x4w8oxmvco"
+
+[node name="Sync" type="Node" parent="." unique_id=2129259020]
+script = ExtResource("5_j0kb1")
+control_mode = 0
+metadata/_custom_type_script = "uid://w5qrj3b0sr8p"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=182607572]
+zoom = Vector2(2, 2)
