@@ -81,7 +81,6 @@ theme_override_font_sizes/font_size = 30
 
 [node name="Sync" type="Node" parent="." unique_id=551715355]
 script = ExtResource("4_kll3q")
-speed_up = 20.0
 metadata/_custom_type_script = "uid://w5qrj3b0sr8p"
 
 [connection signal="curve_built" from="Path2D" to="." method="_on_path_2d_curve_built"]

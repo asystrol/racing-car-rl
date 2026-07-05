@@ -105,9 +105,8 @@ func calculate_steering(delta: float) -> void:
 	rotation = new_heading.angle()
 
 func calculate_reward():
-	print(track.track_reward)
 	if frame_reward != -50:
-		if velocity.dot(transform.x) > 0 and track.track_reward > 0.005:
+		if velocity.dot(transform.x) > 0 and track.track_reward > 0.1:
 			frame_reward = 0.01
 		else:
 			frame_reward = -0.01
@@ -117,7 +116,6 @@ func calculate_reward():
 
 	
 func add_checkpoint_reward():
-	print(checkpoints)
 	var exponent = (-1)*0.6*(split_time-8)
 	check_point_reward = 20 * (1 + exp(exponent))
 	split_time = 0.0
