@@ -36,7 +36,7 @@ To run the models on your local machine, follow these exact steps:
 1. Clone the repository
 
 ```
-git clone https://github.com/your-username/racing-car-rl.git
+git clone https://github.com/asystrol/racing-car-rl.git
 cd racing-car-rl
 
 ```
